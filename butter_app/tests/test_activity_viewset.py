@@ -4,16 +4,11 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from butter_app.models.activity import Activity
 from butter_app.logic.activity_logic import save_activities
+from butter_app.models.activity import Activity
 from butter_app.tests.test_activity_viewset_mocks import (
-    aggregate_activity,
-    aggregate_activity_result,
-    correct_activity,
-    negative_price_task_activity,
-    wrong_date_activity,
-    wrong_status_activity,
-)
+    aggregate_activity, aggregate_activity_result, correct_activity,
+    negative_price_task_activity, wrong_date_activity, wrong_status_activity)
 
 
 class TestAnalyticsTaskViewSet(APITestCase):

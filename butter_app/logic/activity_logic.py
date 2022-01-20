@@ -1,13 +1,9 @@
-from django.db.models import Sum
-
-from butter_app.models.activity import (
-    Activity,
-    ActivityAggregatedSerializer,
-    ActivitySerializer,
-    TaskStatus,
-)
 from celery import shared_task
+from django.db.models import Sum
 from rest_framework.exceptions import ValidationError
+
+from butter_app.models.activity import (Activity, ActivityAggregatedSerializer,
+                                        ActivitySerializer, TaskStatus)
 
 
 def get_aggregated_activity(track_id: str):

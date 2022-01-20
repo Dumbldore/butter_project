@@ -6,7 +6,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from butter_app.logic.activity_logic import get_aggregated_activity, save_activities
+from butter_app.logic.activity_logic import (get_aggregated_activity,
+                                             save_activities)
 from butter_app.models.activity import Activity, ActivitySerializer
 
 
