@@ -1,0 +1,64 @@
+version: "3.7"
+
+### EXTENSION FIELDS ###
+# Used for specifying parts of the configuration on a global level.
+x-restart: &default-restart always
+### EXTENSION FIELDS END ###
+
+networks:
+  butter_network:
+    name: butter_network
+
+services:
+
+  butter-database:
+    networks:
+      - butter_network
+    ports:
+      - "0.0.0.0:5432:5432"
+    hostname: butter_app-database
+    image: postgres:14.0
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: bash -c 'echo >/dev/tcp/localhost/5432'
+      start_period: 15s
+    restart: *default-restart
+
+  butter:
+    hostname: butter_app
+    networks:
+      - butter_network
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "0.0.0.0:8520:8520"
+    command: gunicorn --bind=0.0.0.0:8520 --capture-output --workers=2 butter_app.wsgi
+    healthcheck:
+      test: curl -fsS http://localhost:8520/admin >/dev/null || exit 1
+      start_period: 15s
+    volumes:
+      - ./:/code
+    env_file:
+      - ./butter_app/butter.env
+    depends_on:
+      - butter-database
+    restart: *default-restart
+
+  butter-celery:
+    networks:
+      - butter_network
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: celery -A butter_app worker -l info
+    depends_on:
+      - butter-database
+      - butter-redis
+
+  butter-redis:
+    networks:
+      - butter_network
+    image: "redis:6.2.4-alpine"
+
