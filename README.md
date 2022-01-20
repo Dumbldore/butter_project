@@ -7,11 +7,13 @@ docker-compose up -d
 
 Endpoints:
 
+For posting and listing
 ```
 localhost:8520/api/activity
 ```
-For posting and listing
 
+
+For aggregated information
 ```
 localhost:8520/api/activity/aggregated_information/
 ```
